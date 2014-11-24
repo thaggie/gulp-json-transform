@@ -1,6 +1,6 @@
 {
   "name": "gulp-json-transform",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A gulp plugin to transform json files, pipe json files through it and transform them to other json files or other formats.",
   "main": "./index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   ],
   "author": {
     "name": "Tom Haggie",
-    "url": "https://github.com/adamayres"
+    "url": "https://github.com/thaggie"
   },
   "license": "MIT",
   "devDependencies": {
