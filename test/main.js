@@ -1,6 +1,7 @@
 'use strict';
 
 var jsonTransform = require('../');
+var Promise = require('promise');
 
 var should = require('should');
 require('mocha');
@@ -44,11 +45,15 @@ describe('gulp-json-transform', function () {
 		};
 	};
 
-	it('should transform a json file to a json file', testTransform('input.json', function(data) {
+		it('should transform a json file to a json file', testTransform('input.json', function(data) {
 			return {foobar: data.foo + data.bar};
 		}, '{"foobar":"[foo][bar]"}'));
 
   	it('should transform a json file to a text file', testTransform('input.json', function(data) {
 			return data.foo + data.bar;
+		}, '[foo][bar]'));
+
+  	it('should accept promises', testTransform('input.json', function(data) {
+			return Promise.resolve(data.foo + data.bar);
 		}, '[foo][bar]'));
 });
