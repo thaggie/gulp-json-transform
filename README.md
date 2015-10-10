@@ -40,7 +40,7 @@ gulp.task('do-something', function() {
 #### transformFn
 Type: `function`
 
-A function that takes the JSON object input as the only parameter value and should return either a string which is written raw to the file or a JSON object which is stringified.
+A function that takes the JSON object input as the only parameter value and should return either a string which is written raw to the file, a JSON object which is stringified or a Promise which resolves to a string or a JSON object.
 
 #### whiteSpace
 
