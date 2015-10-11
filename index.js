@@ -5,10 +5,14 @@ var PluginError = gutil.PluginError;
 
 const PLUGIN_NAME = 'gulp-json-transform';
 
-function parseJSON(rawStr) {
-  return new Promise(function(resolve) {
-    var rawText = rawStr.toString('utf8');
-    var json = JSON.parse(rawText);
+function jsonPromiseParse(rawStr) {
+  return new Promise(function(resolve, reject) {
+    var json;
+    try {
+      json = JSON.parse(rawStr);
+    } catch (e) {
+      return reject(new Error('Invalid JSON'));
+    }
     resolve(json);
   });
 }
@@ -26,21 +30,13 @@ module.exports = function(transformFn, jsonSpace) {
     }
 
     if (file.isBuffer()) {
+      var fileContent = file.contents.toString(enc);
 
-      parseJSON(file.contents.toString(enc))
-        .catch(function(e) {
-          throw new PluginError(PLUGIN_NAME, 'Invalid JSON');
-        })
+      jsonPromiseParse(fileContent)
         .then(transformFn)
-        .then(function toBuffer(output) {
-          if (typeof output === 'string') {
-            return new Buffer(output);
-          } else {
-            return new Buffer(JSON.stringify(output, null, jsonSpace));
-          }
-        })
-        .then(function(buffer) {
-          file.contents = buffer;
+        .then(function(output) {
+          var isString = (typeof output === 'string');
+          file.contents = new Buffer(isString ? output : JSON.stringify(output, null, jsonSpace));
           self.push(file);
           cb();
         })
