@@ -1,44 +1,52 @@
+var Promise = require('promise');
 var through = require('through2');
-var PluginError = require('gulp-util').PluginError;
+var gutil = require('gulp-util');
+var PluginError = gutil.PluginError;
 
 const PLUGIN_NAME = 'gulp-json-transform';
 
-var jsonTransform = function (file, transformFn, jsonSpace) {
-  var input = JSON.parse(file.contents.toString('utf8'));
-  var output = transformFn(input);
-  if (typeof output === 'string') {
-    file.contents = new Buffer(output);
-  } else {
-    file.contents = new Buffer(JSON.stringify(output, null, jsonSpace));
-  }
-};
+function jsonPromiseParse(rawStr) {
+  return new Promise(function(resolve, reject) {
+    var json;
+    try {
+      json = JSON.parse(rawStr);
+    } catch (e) {
+      return reject(new Error('Invalid JSON'));
+    }
+    resolve(json);
+  });
+}
 
-var gulpJsonTransform = function(transformFn, jsonSpace) {
+module.exports = function(transformFn, jsonSpace) {
   if (!transformFn) {
-    throw new PluginError(PLUGIN_NAME, PLUGIN_NAME + ': Missing transform function!');
+    throw new PluginError(PLUGIN_NAME, 'Missing transform function!');
   }
 
-  var stream = through.obj(function(file, enc, cb) {
+  return through.obj(function(file, enc, cb) {
+    var self = this;
 
     if (file.isStream()) {
-        return this.emit('error', new PluginError(PLUGIN_NAME, PLUGIN_NAME + ': Streaming not supported'));
+      return self.emit('error', new PluginError(PLUGIN_NAME, 'Streaming not supported'));
     }
 
     if (file.isBuffer()) {
-        try {
-          jsonTransform(file, transformFn, jsonSpace);
-        } catch (e) {
-          console.log(e);
-          return this.emit('error', new PluginError(PLUGIN_NAME, PLUGIN_NAME + ': Unable to transform "' + file.path + '" maybe it\'s not a valid json file.'));
-        }
+      var fileContent = file.contents.toString(enc);
+
+      jsonPromiseParse(fileContent)
+        .then(transformFn)
+        .then(function(output) {
+          var isString = (typeof output === 'string');
+          file.contents = new Buffer(isString ? output : JSON.stringify(output, null, jsonSpace));
+          self.push(file);
+          cb();
+        })
+        .catch(function(e) {
+          gutil.log(PLUGIN_NAME + ':', gutil.colors.red(e.message));
+          self.emit('error', new PluginError(PLUGIN_NAME, e));
+        });
+
     }
 
-    this.push(file);
-
-    return cb();
   });
 
-  return stream;
 };
-
-module.exports = gulpJsonTransform
