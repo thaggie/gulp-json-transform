@@ -35,7 +35,7 @@ gulp.task('do-something', function() {
 
 ## API
 
-### jsonTransform(transformFn, [, whiteSpace])
+### jsonTransform(transformFn [, whiteSpace])
 
 #### transformFn
 Type: `function`

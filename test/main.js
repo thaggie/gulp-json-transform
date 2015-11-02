@@ -10,6 +10,8 @@ var gutil = require('gulp-util');
 var fs = require('fs');
 var path = require('path');
 
+var jshint = require('jshint');
+
 describe('gulp-json-transform', function () {
 
 	var testTransform = function (inputFile, transformFn, expected) {
@@ -45,15 +47,15 @@ describe('gulp-json-transform', function () {
 		};
 	};
 
-		it('should transform a json file to a json file', testTransform('input.json', function(data) {
-			return {foobar: data.foo + data.bar};
-		}, '{"foobar":"[foo][bar]"}'));
+	it('should transform a json file to a json file', testTransform('input.json', function(data) {
+		return {foobar: data.foo + data.bar};
+	}, '{"foobar":"[foo][bar]"}'));
 
   	it('should transform a json file to a text file', testTransform('input.json', function(data) {
-			return data.foo + data.bar;
-		}, '[foo][bar]'));
+		return data.foo + data.bar;
+	}, '[foo][bar]'));
 
   	it('should accept promises', testTransform('input.json', function(data) {
-			return Promise.resolve(data.foo + data.bar);
-		}, '[foo][bar]'));
+		return Promise.resolve(data.foo + data.bar);
+	}, '[foo][bar]'));
 });
