@@ -4,7 +4,7 @@ gulp-json-transform [![Build Status](https://travis-ci.org/thaggie/gulp-json-tra
 A [gulp](https://github.com/gulpjs/gulp) plugin to transform JSON files, pipe JSON files through it and transform them to other JSON files or other text based formats.
 
 
-##Usage
+## Usage
 
 
 First install `gulp-json-transform` as a development dependency:
