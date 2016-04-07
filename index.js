@@ -43,6 +43,7 @@ module.exports = function(transformFn, jsonSpace) {
         .catch(function(e) {
           gutil.log(PLUGIN_NAME + ':', gutil.colors.red(e.message));
           self.emit('error', new PluginError(PLUGIN_NAME, e));
+          self.emit('end');
         });
 
     }
