@@ -1,6 +1,6 @@
-gulp-json-transform 
+gulp-json-transform
 ===================
-
+[![NPM Version](http://img.shields.io/npm/v/gulp-json-transform.svg?style=flat)](https://www.npmjs.com/package/gulp-json-transform)
 [![Build Status](https://travis-ci.org/thaggie/gulp-json-transform.svg)](https://travis-ci.org/thaggie/gulp-json-transform)
 [![Dependencies Status](https://david-dm.org/thaggie/gulp-json-transform.svg)](https://david-dm.org/thaggie/gulp-json-transform)
 
