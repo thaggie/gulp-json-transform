@@ -33,7 +33,9 @@ module.exports = function(transformFn, jsonSpace) {
       var fileContent = file.contents.toString(enc);
 
       jsonPromiseParse(fileContent)
-        .then(transformFn)
+        .then(function(data){
+          return transformFn(data, file);
+        })
         .then(function(output) {
           var isString = (typeof output === 'string');
           file.contents = new Buffer(isString ? output : JSON.stringify(output, null, jsonSpace));
