@@ -34,7 +34,11 @@ module.exports = function(transformFn, jsonSpace) {
 
       jsonPromiseParse(fileContent)
         .then(function(data){
-          return transformFn(data, file);
+          return transformFn(data, {
+            path: file.path,
+            relative: file.relative,
+            base: file.base
+          });
         })
         .then(function(output) {
           var isString = (typeof output === 'string');
