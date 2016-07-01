@@ -55,6 +55,10 @@ describe('gulp-json-transform', function () {
 		return data.foo + data.bar;
 	}, '[foo][bar]'));
 
+  	it('should accept the file as a parameter to the transform function', testTransform('input.json', function(data, file) {
+		return file.relative + ' - ' + data.foo + data.bar;
+	}, 'input.json - [foo][bar]'));
+
   	it('should accept promises', testTransform('input.json', function(data) {
 		return Promise.resolve(data.foo + data.bar);
 	}, '[foo][bar]'));
