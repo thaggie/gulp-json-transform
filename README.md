@@ -28,9 +28,9 @@ Then create a task that uses it:
 ```javascript
 gulp.task('do-something', function() {
 	gulp.src('./app/**/*.json')
-	.pipe(jsonTransform(function(data) {
+	.pipe(jsonTransform(function(data, file) {
 		return {
-			foobar: data.foo + data.bar
+			foobar: data.foo + file.relative
 		};
 	}))
 	.pipe(gulp.dest('./dist/out/'));
@@ -45,6 +45,15 @@ gulp.task('do-something', function() {
 Type: `function`
 
 A function that takes the JSON object and a file object (parameters path, base and relative are exposed) as the input parameters and should return either a string which is written raw to the file, a JSON object which is stringified or a Promise which resolves to a string or a JSON object.
+
+Example structure of the file object:
+```
+{
+  path: 'test/fixtures/input.json',
+  relative: 'input.json',
+  base: 'test/fixtures'
+}
+```
 
 #### whiteSpace
 

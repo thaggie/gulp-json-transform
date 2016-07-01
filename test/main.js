@@ -43,7 +43,7 @@ describe('gulp-json-transform', function () {
 			});
 
 			stream.write(inputJson);
-			stream.end();		
+			stream.end();
 		};
 	};
 
@@ -51,15 +51,27 @@ describe('gulp-json-transform', function () {
 		return {foobar: data.foo + data.bar};
 	}, '{"foobar":"[foo][bar]"}'));
 
-  	it('should transform a json file to a text file', testTransform('input.json', function(data) {
+  it('should transform a json file to a text file', testTransform('input.json', function(data) {
 		return data.foo + data.bar;
 	}, '[foo][bar]'));
 
-  	it('should accept the file as a parameter to the transform function', testTransform('input.json', function(data, file) {
+  it('should accept the file as a parameter to the transform function', testTransform('input.json', function(data, file) {
+		var fileProps = ['path', 'relative', 'base'];
+		for (var fileProp in file) {
+			if (file.hasOwnProperty(fileProp)) {
+				var index = fileProps.indexOf(fileProp);
+				should.ok(index >= 0, 'file object has illegal property: ' + fileProp);
+				if (index >= 0) {
+				  fileProps.splice(index, 1);
+				}
+			}
+		}
+		should.ok(fileProps.length === 0, 'file object is missing properties: ' + JSON.stringify(fileProps));
+
 		return file.relative + ' - ' + data.foo + data.bar;
 	}, 'input.json - [foo][bar]'));
 
-  	it('should accept promises', testTransform('input.json', function(data) {
+  it('should accept promises', testTransform('input.json', function(data) {
 		return Promise.resolve(data.foo + data.bar);
 	}, '[foo][bar]'));
 });
