@@ -11,7 +11,7 @@ function jsonPromiseParse(rawStr) {
     try {
       json = JSON.parse(rawStr);
     } catch (e) {
-      return reject(new Error('Invalid JSON'));
+      return reject(new Error('Invalid JSON: ' + e.message));
     }
     resolve(json);
   });
