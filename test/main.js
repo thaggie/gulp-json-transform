@@ -6,7 +6,7 @@ var Promise = require('promise');
 var should = require('should');
 require('mocha');
 
-var gutil = require('gulp-util');
+var Vinyl = require('vinyl');
 var fs = require('fs');
 var path = require('path');
 
@@ -15,7 +15,7 @@ var jshint = require('jshint');
 describe('gulp-json-transform', function () {
 
 	var testTransform = function (inputFile, transformFn, expected) {
-		var inputJson = new gutil.File({
+		var inputJson = new Vinyl({
 			path: 'test/fixtures/' + inputFile,
 			cwd: 'test/',
 			base: 'test/fixtures',

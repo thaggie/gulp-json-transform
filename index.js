@@ -1,7 +1,8 @@
 var Promise = require('promise');
 var through = require('through2');
-var gutil = require('gulp-util');
-var PluginError = gutil.PluginError;
+var log = require('fancy-log');
+var PluginError = require('plugin-error');
+var colors = require('ansi-colors');
 
 const PLUGIN_NAME = 'gulp-json-transform';
 
@@ -47,7 +48,7 @@ module.exports = function(transformFn, jsonSpace) {
           cb();
         })
         .catch(function(e) {
-          gutil.log(PLUGIN_NAME + ':', gutil.colors.red(e.message));
+          log(PLUGIN_NAME + ':', colors.red(e.message));
           self.emit('error', new PluginError(PLUGIN_NAME, e));
           self.emit('end');
         });
